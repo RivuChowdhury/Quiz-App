@@ -1,8 +1,8 @@
 package com.accenture.course_service.entity;
 
-import javax.persistence.Embeddable;
+//import javax.persistence.Embeddable;
 
-@Embeddable
+//@Embeddable
 public class Answer {
 	private int questionId;
 	private String givenAnswer;

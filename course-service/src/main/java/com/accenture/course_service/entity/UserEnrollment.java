@@ -1,18 +1,30 @@
 package com.accenture.course_service.entity;
 
-import javax.persistence.Entity;
+import org.springframework.data.annotation.Id;
+/*import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.Id;*/
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
+//@Entity
+
+@Document(collection="userenrollments")
 public class UserEnrollment {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+    private String id;
+	/*@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)*/
     private int enrollmentId;
 	private int courseId;
 	private int userId;
 	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public int getEnrollmentId() {
 		return enrollmentId;
 	}

@@ -56,7 +56,8 @@ public class CourseService {
 	}
 
 	public CourseModel getCourseById(int id) {
-		Courses course=courseRepo.findById(id).get();
+		//Courses course=courseRepo.findById(id).get();
+		Courses course=courseRepo.findByCourseId(id).get();
 		CourseModel courseModel=modelMapper.map(course, CourseModel.class);
 		List<QuestionModel> questionModel= webClient.get()
                                              .uri("/question/"+id)
@@ -84,9 +85,15 @@ public class CourseService {
 	            .map(QuestionModel::getQuestionId)
 	            .collect(Collectors.toList());
 		
-		Courses course = courseRepo.findById(courseId).get();
+		//Courses course = courseRepo.findById(courseId).get();
+		Courses course = courseRepo.findByCourseId(courseId).get();
 
 		Quiz quiz=new Quiz();
+		
+		 int attemptedQuizId = quizRepo.findTopByOrderByQuizIdDesc()
+				                  .map(Quiz::getQuizId).orElse(0) + 1;
+	    quiz.setQuizId(attemptedQuizId);
+			    
 		quiz.setQuestionId(questionIds);
 		quiz.setCourses(course);
 		quiz.setUserId(userId);
@@ -100,7 +107,8 @@ public class CourseService {
 	}
 	
 	public int generateResult(int quizId,List<AnswerModel> answers) {
-		Quiz quiz = quizRepo.findById(quizId).get();
+		//Quiz quiz = quizRepo.findById(quizId).get();
+		Quiz quiz = quizRepo.findByQuizId(quizId).get();
 		List<Integer> questionIds=quiz.getQuestionId();
 		
 		/*String idsParam = questionIds.stream()
@@ -151,9 +159,19 @@ public class CourseService {
 	}
 
 	public CourseModel enrollForCourses(int userId, int courseId) {
-		Courses course = courseRepo.findById(courseId).get();
+		//Courses course = courseRepo.findById(courseId).get();
+		//Courses course = courseRepo.findByCourseId(courseId).get();
+		Courses course = courseRepo.findByCourseId(courseId)
+			    .orElseThrow(() -> new RuntimeException("Course not found with id " + courseId));
+
 		CourseModel courseModel=modelMapper.map(course, CourseModel.class);
 		UserEnrollment userEnrollment=new UserEnrollment();
+		
+		int userEnrollmentId = userEnrollmentRepo.findTopByOrderByEnrollmentIdDesc()
+		                                         .map(UserEnrollment::getEnrollmentId)
+		                                         .orElse(0) + 1;
+		userEnrollment.setEnrollmentId(userEnrollmentId);
+		    
 		userEnrollment.setCourseId(courseId);
 		userEnrollment.setUserId(userId);
 		userEnrollmentRepo.save(userEnrollment);

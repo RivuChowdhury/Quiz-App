@@ -2,23 +2,42 @@ package com.accenture.course_service.entity;
 
 import java.util.List;
 
-import javax.persistence.Entity;
+/*import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.Table;*/
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-@Entity
-@Table(name="courses")
+/*@Entity
+@Table(name="courses")*/
+
+@Document(collection="courses")
 public class Courses {
+	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+    private String id; 
+	
+	
+	/*@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)*/
+	@Field("course_id")
 	private int courseId;
+	@Field("course_name")
 	private String courseName;
 	
-	@OneToMany
+	//@OneToMany
 	private List<Quiz> quizzes;
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	
 	public List<Quiz> getQuiz() {
 		return quizzes;
